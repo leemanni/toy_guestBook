@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- DOCTYPE이 sqlMap인 xml 파일은 처리할 SQL 명령을 기억하는 xml 파일이다. -->
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+<sqlMap namespace="com.leemanni.vo.GuestbookVO">
+	<!-- id : SQL 명령을 식별한다. -->
+	<!-- parameterClass : SQL 명령으로 전달되는 데이터의 타입을 적는다. -->
+	<!-- resultClass : SQL 명령문에의해 출력되는 데이터의 타입을 적는다. -->
+	<insert id="insert" parameterClass="vo">
+		insert into guestbook (idx, name, password, memo, ip) values(guestbook_idx_seq.nextval, #name#, #password#, #memo#, #ip# )
+	</insert>	
+	
+	<select id="selectCount" resultClass="int">
+		select count(*) from guestbook
+	</select>
+	
+	
+	<select id="selectList" parameterClass="java.util.HashMap" resultClass="vo">
+		<![CDATA[
+			select * from(
+				select rownum rnum, TT.* from(
+					select * from guestbook order by idx desc
+				)TT where rownum <= #endNo#
+			) where rnum >= #startNo#
+		]]>
+	</select>
+	
+	
+	<select id="selectCount_params" parameterClass="param" resultClass="int">
+		select count(*) from guestbook where 
+		<isEqual property="category" compareValue="내용">
+			memo LIKE '%'||#item#||'%'
+		</isEqual>
+		<isEqual property="category" compareValue="이름">
+			name LIKE '%'||#item#||'%'
+		</isEqual>
+		<isEqual property="category" compareValue="내용+이름">
+			memo LIKE '%'||#item#||'%' or name  LIKE '%'||#item#||'%'
+		</isEqual>
+	</select>
+	
+	<select id="selectList_params" parameterClass="param" resultClass="vo">
+			select * from(
+				select rownum rnum, TT.* from(
+					select * from guestbook where
+					<isEqual property="category" compareValue="내용">
+						memo LIKE '%'||#item#||'%'
+					</isEqual>
+					<isEqual property="category" compareValue="이름">
+						name LIKE '%'||#item#||'%'
+					</isEqual>
+					<isEqual property="category" compareValue="내용+이름">
+						memo LIKE '%'||#item#||'%' or name  LIKE '%'||#item#||'%'
+					</isEqual>
+					order by idx desc
+		<![CDATA[
+				)TT where rownum <= #endNo#
+			) where rnum >= #startNo#
+		]]>
+	</select>
+	
+	<select id="selectByIdx" parameterClass="int" resultClass="vo">
+		select * from guestbook where idx = #idx#
+	</select>
+	
+	
+</sqlMap>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
