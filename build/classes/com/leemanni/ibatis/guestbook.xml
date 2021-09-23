@@ -62,6 +62,13 @@
 		select * from guestbook where idx = #idx#
 	</select>
 	
+	<delete id="delete" parameterClass="int">
+		delete from guestbook where idx = #idx#
+	</delete>
+	
+	<update id="update" parameterClass="vo"> 
+		update guestbook set memo = #memo# where idx = #idx#
+	</update>
 	
 </sqlMap>
 

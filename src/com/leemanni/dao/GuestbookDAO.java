@@ -55,6 +55,14 @@ public class GuestbookDAO {
 		
 		return (GuestbookVO) mapper.queryForObject("selectByIdx", idx);
 	}
+	public void delete(SqlMapClient mapper, int idx) throws SQLException {
+		System.out.println("GuestbookDAO ==> delete(idx)");
+		mapper.delete("delete", idx);
+	}
+	public void update(SqlMapClient mapper, GuestbookVO vo) throws SQLException {
+		System.out.println("GuestbookDAO ==> update(idx)");
+		mapper.update("update" , vo);
+	}
 	
 	
 	
